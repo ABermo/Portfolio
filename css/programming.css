@@ -32,3 +32,51 @@ body {
 .topnav a.active {
     background-color: #6E7C7C;
 }
+
+.timeline {
+    position: relative;
+    max-width: 1200px;
+    margin: 100px auto;
+}
+
+.timeline h1 {
+    text-align: center;
+}
+
+.container {
+    position: relative;
+    padding: 10px 50px;
+    width: 50%;
+}
+
+.starting {
+    background-color: #384147;
+    padding: 20px 30px;
+    position: relative;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.secondary {
+    background-color: #384147;
+    padding: 20px 30px;
+    position: relative;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.university {
+    background-color: #384147;
+    padding: 20px 30px;
+    position: relative;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.now {
+    background-color: #384147;
+    padding: 20px 30px;
+    position: relative;
+    border-radius: 6px;
+    font-size: 15px;
+}
