@@ -1,18 +1,35 @@
-body {
-    background-color: #121212;
-    color: #ffffff;
-    margin: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
+:root {
+    --bg: #121212;
+    --card: #384147;
+    --card-dim: #2a3136;
+    --line: #2f363a;
+    --accent: #89a7a7;
+    --active: #6E7C7C;
+    --text: #ffffff;
 }
 
+* { box-sizing: border-box; }
 
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    line-height: 1.7;
+}
+
+/* ---------- Nav ---------- */
 .topnav {
-    background-color: #000000;
+    background-color: #000;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     padding: 15px 0;
     box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .topnav a {
@@ -20,145 +37,177 @@ body {
     text-decoration: none;
     padding: 14px 24px;
     font-size: 1rem;
-    transition: 0.3s;
+    transition: background-color 0.3s;
     border-radius: 6px;
     margin: 0 5px;
 }
 
-.topnav a:hover {
-    background-color: #384147;
-}
-
-.topnav a.active {
-    background-color: #6E7C7C;
-}
-
-.timeline {
-    position: relative;
-    max-width: 1200px;
-    margin: 100px auto;
-}
+.topnav a:hover { background-color: #384147; }
+.topnav a.active { background-color: var(--active); }
+.topnav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 h1 {
     text-align: center;
+    color: var(--accent);
+    font-size: 3rem;
+    margin: 40px 0 0;
 }
 
-.timeline::after {
+/* ---------- Timeline ---------- */
+.timeline {
+    position: relative;
+    max-width: 1000px;
+    margin: 70px auto 160px;
+    padding: 0 20px;
+}
+
+/* the faint track */
+.timeline::before {
     content: '';
     position: absolute;
-    width: 6px;
-    height: 100%;
-    background-color: #FFFFFF;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    transform: translateX(-50%);
+    background-color: var(--line);
+    border-radius: 2px;
+}
+
+/* the bright line that fills in as you scroll */
+.timeline-fill {
+    position: absolute;
     top: 0;
     left: 50%;
-    z-index: -1;
-    animation: moveline 6s linear forwards;
+    width: 4px;
+    height: 0;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, var(--accent), #ffffff);
+    border-radius: 2px;
+    box-shadow: 0 0 12px rgba(137,167,167,0.6);
+    z-index: 1;
 }
 
-@keyframes moveline {
-    0% {
-        height: 0;
-    }
-    100% {
-        height: 100%;
-    }
-}
-
-.container {
+.entry {
     position: relative;
-    padding: 10px 50px;
     width: 50%;
-    animation: movedown 1s linear forwards;
+    padding: 30px 50px;
+}
+
+.entry.left  { left: 0; }
+.entry.right { left: 50%; }
+
+/* year bubble sits on the line */
+.year {
+    position: absolute;
+    top: 45px;
+    width: 70px;
+    height: 70px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.05rem;
+    background-color: var(--line);
+    color: #8a959a;
+    border: 4px solid var(--bg);
+    z-index: 2;
+    transition: background-color 0.5s, color 0.5s, box-shadow 0.5s;
+}
+
+.left .year  { right: -35px; }
+.right .year { left: -35px; }
+
+.card {
+    position: relative;
+    background-color: var(--card);
+    padding: 20px 30px;
+    border-radius: 8px;
+    font-size: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+}
+
+.card h2 {
+    margin: 0 0 10px;
+    color: var(--accent);
+    font-size: 1.4rem;
+}
+
+.card p { margin: 0 0 1em; }
+.card p:last-child { margin-bottom: 0; }
+
+/* arrow pointing at the line */
+.card::after {
+    content: '';
+    position: absolute;
+    top: 52px;
+    border: 15px solid transparent;
+}
+
+.left .card::after  { right: -30px; border-left-color: var(--card); }
+.right .card::after { left: -30px;  border-right-color: var(--card); }
+
+/* ---------- Scroll reveal ---------- */
+/* Only hide things when JS is running, so the page still works without it */
+.js .entry .card {
     opacity: 0;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.js .entry.left  .card { transform: translateX(-60px); }
+.js .entry.right .card { transform: translateX(60px); }
+
+.js .entry.visible .card {
+    opacity: 1;
+    transform: translateX(0);
 }
 
-@keyframes movedown {
-    0% {
-        opacity: 0;
-        transform: translateY(-30px);
+.entry.visible .year {
+    background-color: #ffffff;
+    color: #000;
+    box-shadow: 0 0 0 6px rgba(137,167,167,0.35);
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 800px) {
+    h1 { font-size: 2.2rem; }
+
+    .timeline::before,
+    .timeline-fill { left: 50px; }
+
+    .entry,
+    .entry.left,
+    .entry.right {
+        width: 100%;
+        left: 0;
+        padding: 20px 0 20px 100px;
     }
-    100% {
-        opacity: 1;
-        transform: translateY(0px);
+
+    .left .year,
+    .right .year {
+        left: 15px;
+        right: auto;
+        width: 60px;
+        height: 60px;
+        font-size: 0.95rem;
     }
+
+    .left .card::after,
+    .right .card::after {
+        left: -30px;
+        right: auto;
+        border-left-color: transparent;
+        border-right-color: var(--card);
+    }
+
+    .js .entry.left .card,
+    .js .entry.right .card { transform: translateY(30px); }
+    .js .entry.visible .card { transform: none; }
 }
 
-.container:nth-child(1) {
-    animation-delay: 0s;
-}
-
-.container:nth-child(2) {
-    animation-delay: 1.5s;
-}
-
-.container:nth-child(3) {
-    animation-delay: 3.2s;
-}
-
-.container:nth-child(4) {
-    animation-delay: 4.9s;
-}
-
-.starting {
-    background-color: #384147;
-    padding: 20px 30px;
-    position: relative;
-    border-radius: 6px;
-    font-size: 15px;
-}
-
-.secondary {
-    background-color: #384147;
-    padding: 20px 30px;
-    position: relative;
-    border-radius: 6px;
-    font-size: 15px;
-}
-
-.university {
-    background-color: #384147;
-    padding: 20px 30px;
-    position: relative;
-    border-radius: 6px;
-    font-size: 15px;
-}
-
-.now {
-    background-color: #384147;
-    padding: 20px 30px;
-    position: relative;
-    border-radius: 6px;
-    font-size: 15px;
-}
-
-.left {
-    left: -7.75%;
-}
-
-.right {
-    left: 50%;
-}
-
-.left-container-arrow {
-    height: 0;
-    width: 0;
-    position:absolute;
-    top: 28px;
-    z-index: 1;
-    border-top: 15px solid transparent;
-    border-bottom: 15px solid transparent;
-    border-left: 15px solid #384147;
-    right: -15px;
-}
-
-.right-container-arrow {
-    height: 0;
-    width: 0;
-    position:absolute;
-    top: 28px;
-    z-index: 1;
-    border-top: 15px solid transparent;
-    border-bottom: 15px solid transparent;
-    border-right: 15px solid #384147;
-    left: -15px;
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .js .entry .card,
+    .year { transition: none; }
+    .js .entry .card { opacity: 1; transform: none; }
 }
