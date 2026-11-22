@@ -1,0 +1,26 @@
+.topnav {
+    background-color: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.topnav a {
+    color: white;
+    text-decoration: none;
+    padding: 14px 24px;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    border-radius: 6px;
+    margin: 0 5px;
+}
+
+.topnav a:hover { background-color: #384147; }
+.topnav a.active { background-color: #6E7C7C; }
+.topnav a:focus-visible { outline: 2px solid #89a7a7; outline-offset: 2px; }
